@@ -176,7 +176,9 @@ with tab1:
     g_min, g_max = f["gasto_min"].sum(), f["gasto_max"].sum()
     g_cal = f["gasto_calibrado"].sum()
     n_pag = f["chave_pagina"].nunique()
-    n_ads = pd.to_numeric(f["ads_na_biblioteca"], errors="coerce").fillna(0).sum()
+    n_ads = (f.drop_duplicates("chave_pagina")
+               .pipe(lambda d: pd.to_numeric(d["ads_na_biblioteca"], errors="coerce"))
+               .fillna(0).sum())
 
     c1, c2, c3, c4 = st.columns(4)
     c1.markdown(kpi_card(
